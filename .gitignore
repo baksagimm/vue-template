@@ -27,5 +27,4 @@ coverage
 *.sln
 *.sw?
 
-/node_modules
 package-lock.json
