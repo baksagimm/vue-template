@@ -1,13 +1,21 @@
 <template lang="pug">
 .shell
+
   .side-nav
-    // this is a side nav bar
+    // this is a side nav bar.
+    // in most case, it is a good practice to size the parent div from the child.
+    // see this example. the .side-nav width is not set.
+    // but the children's margin, paddings, width... etc makes up the width of it's parent.
+    // this is important because it will prevent children element breaking out of it's parent in responsive view width.
     div
     div
-    div
-  .display
-    // this is the display beside the side nav bar
-    sui-nav(auto-hide='3')
+
+  div(style="flex-grow: 1;")
+    // this is the content section right beside the side nav bar.
+    // flex-grow is to expand the width.
+
+    sui-nav(auto-hide)
+      // sui-nav check skateui details for more info
       div
         span Raffina
         div
@@ -15,111 +23,147 @@
           span Documentation&nbsp;
           span Account Setting&nbsp;
           span Logout
-    .main
-      // this is the main content.
-      // it has margin auto and max width for comfortable viewing
+
+    .content
+      // this is the main content box.
+      // it has margin auto and max width for comfortable viewing (ref style sect.)
+      // do not use flex box as a content parent unless inevitable.
+
       div
-        // this is where short description of what this page does
+        // short description of what this page will be displayed here.
         h1 Records
-        p.
-          Records are data that your service user's will store and read from your service database.#[br]
-          All records are organized by table names and restrictions.#[br]
-          With additional query points such as index names and tags, references,#[br]
-          you can have more flexible option when fetching the records.
-        br
-        sui-button(style="float:right;") Read Doc
+        div(style='display: inline-block;')
+          // inline-block is useful when you want your parent div to be same the width of the content.
+          p.
+            Records are data that your service user's will store and read from your service database.#[br]
+            All records are organized by table names and restrictions.#[br]
+            With additional query points such as index names and tags, references,#[br]
+            you can have more flexible option when fetching the records.
+          div(style='text-align:right;')
+            // you can use additional div to position the child 
+            sui-button Read Doc
+
+      // don't be afraid to use br tags for margins. it's fine.
       br
       br
       br
       br
-      sui-select(@change="searchTarget=$event.target.value")
+
+      // styling effect of select box varies across os and browsers.
+      // please check the style section below.
+      sui-select(@change="searchTarget=$event.target.value" style="margin-bottom:1em;")
         option(value="table" selected) Table name
         option(value="user") User ID
-        option(value="reference") Record ID
+        option(value="record") Record ID
+
+      // it's okay to use dummy spaces instead of margins.
+      // in some cases it's more safer then using margin when small display starts to wrap the flex div contents.
+      // ex) child margin can be responsible for pushing the document width further than the parent.
+      // although in this case, the parent is not a flex box. this is just an example.
+      // (again, do note that using flex box for content parent is a bad idea)
       span &nbsp;&nbsp;
-      // this is input box for dark admin pages
+
+      // check the input box style example for dark admin pages.
       // border needs to be removed, and background color needs to be set.
-      // ! check the styling below !
-      sui-input(type='search' placeholder="Search")
+      // ! check the style sections !
+      sui-input(type='search' placeholder="Search" style="margin-bottom:1em;")
+
       br
-      br
-      div(v-if="searchTarget === 'table' || searchTarget === 'user'" style="background-color:rgba(0 0 0 / 25%);padding: 1em; border-radius:8px;")
+
+      .searchOptions(v-if="searchTarget !== 'record'")
         // this is where you see detailed search options
-        label(for="access_group") Access Group:
-        span &nbsp;&nbsp;
-        sui-select#access_group
-          option(value="0" selected) Public
+        // note depending on the main search target, additional search option is bit different.
+        // try it out from the ui
+
+        // when composing contents make sure it breaks properly.
+        // notice here, we are using single break lines with margin-bottom.
+
+        label(for="access_group" style='width: 12em;display:inline-block') Access Group:
+        sui-select#access_group(style="width:324px")
           option(value="1" selected) Registered
+          option(value="0" selected) Public
           option(value="private" selected) Private
+
         br
-        br
+
         template(v-if="searchTarget==='user'")
-          label(for="table") Table Name:
-          span &nbsp;&nbsp;
+          label(for="table" style='width: 12em;display:inline-block') Table Name:
           sui-input#table(placeholder="Table Name")
+
           br
-          br
-          label(for="subs") Subscription Table:
-          span &nbsp;&nbsp;
-          sui-select#subs
+
+          label(for="subs" style='width: 12em;display:inline-block') Subscription Table:
+          sui-select#subs(style="width:324px")
             option(value="subscr") Subscribed
             option(value="public") Public
+
           br
-          br
-        template(v-if="searchTarget === 'table'")
-          label(for="ref_id") Reference ID:
+
+        label(for="idx_name" style='width: 12em;display:inline-block') Index Name:
+        sui-input#idx_name
+
+        br
+
+        label(style='width: 12em;display:inline-block') Index Value:
+        div(style="display:inline-block;margin-bottom:0;")
+          // wrap content that you don't want it to break
+
+          sui-select(style="width: 6em;margin-bottom:1em;" @change="indexType=$event.target.value")
+            // change input box type directly from @change by using $event object.
+            // see how v-bind is used on sui-input
+            option(value="text" selected) String
+            option(value="number") Number
           span &nbsp;&nbsp;
+          sui-input#idx_val(:type="indexType" placeholder="Value" style='width:220px;margin-bottom:1em;')
+
+        br
+
+        label(for="tag" style='width: 12em;display:inline-block') Tag:
+        sui-input#tag
+
+        br
+
+        template(v-if="searchTarget === 'table'")
+          label(for="ref_id" style='width: 12em;display:inline-block') Reference ID:
           sui-input#ref_id(placeholder="Record ID")
+
           br
-          br
-          br
-        p Index:
-        sui-input#idx_name(placeholder="Index Name")
-        br
-        br
-        sui-select(style="width: 6em")
-          option(value="nunber") Number
-          option(value="string") String
-          option(value="boolean") Boolean
-        span &nbsp;&nbsp;
-        sui-input#idx_val(placeholder="Index Value")
-        br
-        br
-        br
-        label(for="tag") Tag:
-        span &nbsp;&nbsp;
-        sui-input#tag(placeholder="Tag Name")
-        br
-        br
-        sui-button(style="float:right;") Search
-        br
-        br
+
+        div(style="text-align:right;margin-bottom: 0;")
+          // you can use additional div to position the child
+          sui-button Search
+
       br
-      br
-      br
+
       .panel
         // this is where you see the database
+
         .slot
+          // this is a column header
           .par
             span Table Name
             span Table Size
             span Number Of Records
             span
-        .slot(v-if="tblList" v-for="(i, tbl) in tblList" @click="generateList(tbl)")
-          .par
+
+        .slot(v-for="(i, tbl) in tblList")
+          // this is list of data
+          .par(@click="generateList(tbl)")
             span tbl-{{tbl}}
             span {{i.size}}
             span {{i.count}}
             span +
-          .nest-shell(v-if='recArr[tbl]')
-            .nest(v-for="item in recArr[tbl]")
+          .nest-shell(:style="{height: recArr[tbl] ? '60vh' : '0vh'}")
+            .nest(v-if='recArr[tbl]' v-for="item in recArr[tbl]")
               span Uploaded: {{item.upl}}
               span User: {{item.user}}
               span index: {{item.idx}}
+
       .pagination
         span(@click="createTbl") Prev
         div 1 2 3 4 ...
         span(@click="createTbl") Next
+
 </template>
 <script setup>
 // setup script is basically what you run in created()
@@ -129,12 +173,14 @@ import { reactive, ref, watch } from "vue";
 let recArr = reactive({}); // use reactive when you want the dom to be reactive to object changes
 let tblList = ref(null); // use ref when you want a reactive primitive data
 let searchTarget = ref('table');
+let indexType = ref('text');
 let overlay = ref(null); // use ref when you want to use variable to save template element
 
 watch(tblList, (newValue, oldValue) => {
-  // watch primitive level data wrapped in ref()
-  // you can watch key level object datas as well,
-  // but if computation can be done in vue templates it wouldnt be nessesary
+  // example of watching primitive level data wrapped in ref()
+  // you can watch key level object data as well,
+  // but if the computation can be done in vue templates (or computed() method) it wouldnt be nessesary.
+  // in most cases it is unlikly you would need watch method.
   console.log({ newValue, oldValue });
 });
 
@@ -149,7 +195,7 @@ function createTbl() {
       count: window.utils.randomString(6, true)
     };
   }
-  tblList.value = list;
+  tblList.value = list; // this is how you assign new ref data
 }
 
 createTbl();
@@ -161,12 +207,6 @@ function generateList(tbl) {
     delete recArr[tbl];
     return;
   }
-  // else {
-  //   // for viewing one table at a time
-  //   for(let k in recArr) {
-  //     delete recArr[k];
-  //   }
-  // }
 
   let len = 100;
   recArr[tbl] = [];
@@ -197,42 +237,119 @@ function generateList(tbl) {
   }
 }
 
-.overlay {
-  padding: 1em;
-  background-color: #656565;
-  color: white;
+.side-nav {
+  background-color: #293FE6;
+
+  &>* {
+    width: 36px;
+    height: 36px;
+    margin: 8px;
+    border-radius: 8px;
+    background-color: rgba(255 255 255 / 20%);
+  }
+}
+
+sui-nav {
+  box-sizing: border-box;
+  margin: 0;
+  background: #505050;
+
+  &>div {
+    max-width: 1000px;
+    margin: 10px auto;
+    display: flex;
+    align-items: center;
+
+    &>* {
+      &:first-child {
+        // Title
+        opacity: 0.6;
+        font-size: 20px;
+      }
+    }
+
+    div {
+      // menu box
+      flex-grow: 1;
+      text-align: right;
+
+      &>* {
+        margin-left: 2vw;
+        display: inline-block;
+      }
+    }
+  }
 }
 
 sui-select option {
-  // option styling varies across browser. need !important until skate ui comes up with custom styles.
+  // option styling varies across browser.
+  // in some browser, option inherits text colors and results in white background and white text.
+  // set the color and background of the options if parent has text color other than black.
+  // this is temporary until skateui come up with custom select box style.
   color: black;
   background-color: white;
 }
 
-.main {
+sui-input {
+  background-color: rgba(255, 255, 255, 0.08);
+  border: none; // border needs to be none for skapi web admin
+  width: 324px;
+
+  input::placeholder {
+    color: rgba(255 255 255 / 0.66)
+  }
+}
+
+.content {
   // this is the main content
   // set max width and top margin for ideal view
 
   margin: 6em auto 0;
   max-width: 1000px;
 
+  .searchOptions {
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.2), -1px -1px 1px rgba(0, 0, 0, 0.25), inset 1px 1px 1px rgba(0, 0, 0, 0.5);
+    background-color: #505050;
+    padding: 1em;
+    border-radius: 8px;
+
+    &>* {
+      margin-bottom: 1em;
+    }
+  }
+
   .panel {
     box-sizing: border-box;
     max-width: 1000px;
-    padding: 16px;
-    // height: 631px;
+    padding: 16px 16px 1px; // cool tip: by giving 1px of padding, the child's last margin-bottom will work.
     background: #505050;
     box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.2), -1px -1px 1px rgba(0, 0, 0, 0.25), inset 1px 1px 1px rgba(0, 0, 0, 0.5);
     border-radius: 8px;
+    width: 100%;
 
     .slot {
+      margin-bottom: 16px;
+      border-radius: 8px;
+
       .nest-shell {
-        max-height: 50vh;
+        transition: height 0.1s;
         overflow-y: auto;
       }
 
-      &:not(:first-child) {
+      &:first-child {
+        &>.par {
+          background-color: transparent;
+        }
 
+        color: rgba(255, 255, 255, 0.4);
+
+        .par {
+          padding-bottom: 0;
+          cursor: default;
+        }
+      }
+
+      &:not(:first-child) {
         background: #434343;
       }
 
@@ -251,24 +368,6 @@ sui-select option {
           background-color: rgba(0 0 0 / 0.1);
         }
       }
-
-      border-radius: 8px;
-
-      &:first-child {
-        &>.par {
-          background-color: transparent;
-        }
-
-        color: rgba(255, 255, 255, 0.4);
-
-        .par {
-          padding-bottom: 0;
-          cursor: default;
-        }
-      }
-
-      margin-bottom: 16px;
-      width: 100%;
 
       .par {
         cursor: pointer;
@@ -289,18 +388,6 @@ sui-select option {
     }
   }
 
-  sui-input {
-    background-color: rgba(255, 255, 255, 0.08);
-    border: none;
-    width: 324px;
-
-    // box-shadow: -1px -1px 1px rgba(0, 0, 0, 0.25), inset 1px 1px 1px rgba(0, 0, 0, 0.5);
-    // box-shadow: -1px -1px 1px rgba(0, 0, 0, 0.25), inset 1px 1px 1px rgba(0, 0, 0, 0.5);
-    input::placeholder {
-      color: white
-    }
-  }
-
   .pagination {
     display: flex;
     width: 100%;
@@ -311,57 +398,5 @@ sui-select option {
       cursor: pointer;
     }
   }
-}
-
-sui-nav {
-  box-sizing: border-box;
-  margin: 0;
-  background: #505050;
-
-  &>div {
-    max-width: 1000px;
-    margin: 10px auto;
-    display: flex;
-    align-items: center;
-
-    &>* {
-      &:first-child {
-        opacity: 0.6;
-        font-size: 20px;
-      }
-
-      display: inline-block;
-    }
-
-    h4 {
-      display: inline-block;
-    }
-
-    div {
-      flex-grow: 1;
-      text-align: right;
-
-      &>* {
-        margin-left: 2vw;
-        display: inline-block;
-      }
-    }
-  }
-}
-
-.side-nav {
-  background-color: #293FE6;
-
-  div {
-    width: 36px;
-    height: 36px;
-    margin: 8px;
-    border-radius: 8px;
-    background-color: rgba(255 255 255 / 20%);
-  }
-}
-
-.display {
-  flex-grow: 1;
 }
 </style>
