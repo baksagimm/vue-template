@@ -1,25 +1,38 @@
-<script setup>
-</script>
+<template lang="pug">
+main
+  h1 Vue 3 concept examples for skapi web.
+  hr
+  h2 Notes:
+  ul
+    li.
+      Design directions and tips are included in comments.#[br]
+      So please read them carefully.
+    
+    br
+    
+    li.
+      This template uses skate ui, Vue 3 Composition API, served by Vite.
 
-<template>
-  <main>
-    <h1>Vue 3 concept examples for skapi web.</h1>
-    <hr>
-    <h2>Notes:</h2>
-    <ul>
-      <li>Design directions and tips are included in comments. So please read them carefully.</li>
-      <li>This template uses skate ui and Vue 3 Composition API hot reload by Vite.</li>
-      <li>Vite seems to have problem when hot reloading custom components.</li>
-    </ul>
-    <p></p>
-    <p></p>
-    <h2>Pages:</h2>
-    <ul>
-      <li>
-        <RouterLink to="/record-display">Record Display</RouterLink>
-      </li>
-    </ul>
-  </main>
+    br
+
+    li.
+      Vite seems to have quirks when hot reloading custom components. (ex. undefined components)#[br]
+      But it goes away when reloaded manually.
+
+  h2 Pages:
+  ul
+    li
+      RouterLink(to="/record-display") Record Display#[br]
+      | Design concept of record display.#[br]
+      | For accurate styling details, refer raffina's Figma
+
+    br
+
+    li
+      RouterLink(to="/record-display-bad") Bad example of HTML design#[br]
+      | Bad example of HTML programming that many developers can easily fall into.#[br]
+      | Example is based on 'Record Display' page.
+
 </template>
 
 <style lang="less">

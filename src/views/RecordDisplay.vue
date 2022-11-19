@@ -56,11 +56,9 @@
         option(value="user") User ID
         option(value="record") Record ID
 
-      // it's okay to use dummy spaces instead of margins.
-      // in some cases it's more safer then using margin when small display starts to wrap the flex div contents.
-      // ex) child margin can be responsible for pushing the document width further than the parent.
-      // although in this case, the parent is not a flex box. this is just an example.
-      // (again, do note that using flex box for content parent is a bad idea)
+      // sometimes it's okay to use dummy spaces instead of margins.
+      // in some cases it's more safer then using margin when small display starts to wrap the div contents.
+      // ex) when margin is used, child margins can be responsible for pushing the document width further than the parent.
       span &nbsp;&nbsp;
 
       // check the input box style example for dark admin pages.
@@ -168,21 +166,13 @@
 <script setup>
 // setup script is basically what you run in created()
 
-import { reactive, ref, watch } from "vue";
+import { reactive, ref } from "vue";
 
 let recArr = reactive({}); // use reactive when you want the dom to be reactive to object changes
 let tblList = ref(null); // use ref when you want a reactive primitive data
 let searchTarget = ref('table');
 let indexType = ref('text');
 let overlay = ref(null); // use ref when you want to use variable to save template element
-
-watch(tblList, (newValue, oldValue) => {
-  // example of watching primitive level data wrapped in ref()
-  // you can watch key level object data as well,
-  // but if the computation can be done in vue templates (or computed() method) it wouldnt be nessesary.
-  // in most cases it is unlikly you would need watch method.
-  console.log({ newValue, oldValue });
-});
 
 function createTbl() {
   // creates fake tables
@@ -221,7 +211,7 @@ function generateList(tbl) {
 }
 
 </script>
-<style lang="less">
+<style lang="less" scoped>
 .shell {
   // this is a whole display
   min-height: 100vh;
