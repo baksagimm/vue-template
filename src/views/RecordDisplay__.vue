@@ -49,35 +49,23 @@
       br
       br
 
-      //- // styling effect of select box varies across os and browsers.
-      //- // please check the style section below.
-      //- sui-select(@change="searchTarget=$event.target.value" style="margin-bottom:1em;")
-      //-   option(value="table" selected) Table name
-      //-   option(value="user") User ID
-      //-   option(value="record") Record ID
+      // styling effect of select box varies across os and browsers.
+      // please check the style section below.
+      sui-select(@change="searchTarget=$event.target.value" style="margin-bottom:1em;")
+        option(value="table" selected) Table name
+        option(value="user") User ID
+        option(value="record") Record ID
 
-      //- // sometimes it's okay to use dummy spaces instead of margins.
-      //- // in some cases it's more safer then using margin when small display starts to wrap the div contents.
-      //- // ex) when margin is used, child margins can be responsible for pushing the document width further than the parent.
-      //- span &nbsp;&nbsp;
+      // sometimes it's okay to use dummy spaces instead of margins.
+      // in some cases it's more safer then using margin when small display starts to wrap the div contents.
+      // ex) when margin is used, child margins can be responsible for pushing the document width further than the parent.
+      span &nbsp;&nbsp;
 
-      //- // check the input box style example for dark admin pages.
-      //- // border needs to be removed, and background color needs to be set.
-      //- // ! check the style sections !
-      //- sui-input(type='search' placeholder="Search" style="margin-bottom:1em;")
+      // check the input box style example for dark admin pages.
+      // border needs to be removed, and background color needs to be set.
+      // ! check the style sections !
+      sui-input(type='search' placeholder="Search" style="margin-bottom:1em;")
 
-      .dropDownInput(style="float:left;display:inline-block;box-shadow:-1px -1px 2px rgb(0 0 0 / 50%), 1px 1px 1px rgb(255 255 255 / 50%);")
-        sui-select(@change="searchTarget=$event.target.value" style="box-shadow:none;width:8em;outline:none;background-color:rgba(255, 255, 255, 0.08);")
-          option(value="table" selected) Table name
-          option(value="user") User ID
-          option(value="record") Record ID
-        sui-input(type='search' placeholder="Search" style="outline:none;box-shadow:none;border:none;")
-
-      sui-button(style="float:right;") + Add Record
-
-      br
-      br
-      br
       br
 
       .searchOptions(v-if="searchTarget !== 'record'")
@@ -88,69 +76,54 @@
         // when composing contents make sure it breaks properly.
         // notice here, we are using single break lines with margin-bottom.
 
-        //- label(for="access_group" style='width: 12em;display:inline-block') Access Group:
-        //- sui-select#access_group(style="width:324px")
-        //-   option(value="1" selected) Registered
-        //-   option(value="0" selected) Public
-        //-   option(value="private" selected) Private
-        .sectionDetail(style="display:inline-block;vertical-align:top;;margin-right:1em;")
-          p(style="margin:0") Access Group 
-          div
-            label(for="access_group_p" style='display:inline-block') Public&nbsp;
-            sui-input#access_group(name='ac' type='radio')
-            label(for="access_group_pr" style='display:inline-block') Private&nbsp;
-            sui-input#access_group_pr(name='ac' type='radio')
-            label(for="access_group_r" style='display:inline-block') Registered&nbsp;
-            sui-input#access_group_r(name='ac' type='radio')
+        label(for="access_group" style='width: 12em;display:inline-block') Access Group:
+        sui-select#access_group(style="width:324px")
+          option(value="1" selected) Registered
+          option(value="0" selected) Public
+          option(value="private" selected) Private
+
+        br
+
+        template(v-if="searchTarget==='user'")
+          label(for="table" style='width: 12em;display:inline-block') Table Name:
+          sui-input#table(placeholder="Table Name")
 
           br
 
-          template(v-if="searchTarget==='user'")
-            label(for="table" style='display:block') Table Name:
-            sui-input#table(placeholder="Table Name")
-
-            br
-
-            //- label(for="subs" style='width: 12em;display:inline-block') Subscription Table:
-            //- sui-select#subs(style="width:324px")
-            //-   option(value="subscr") Subscribed
-            //-   option(value="public") Public
-
-            p Subscription Table
-            div
-              label(for="access_group_p" style='display:inline-block') Public&nbsp;
-              sui-input#access_group(name='ac' type='radio')
-              label(for="access_group_pr" style='display:inline-block') Private&nbsp;
-              sui-input#access_group_pr(name='ac' type='radio')
-
-        .sectionDetail(style="display:inline-block;vertical-align:top")
-          label(for="idx_name" style='display:block') Index Name:
-          sui-input#idx_name
+          label(for="subs" style='width: 12em;display:inline-block') Subscription Table:
+          sui-select#subs(style="width:324px")
+            option(value="subscr") Subscribed
+            option(value="public") Public
 
           br
 
-          label(style='display:block') Index Value:
-          div(style="display:inline-block;margin-bottom:0;")
-            // wrap content that you don't want it to break
+        label(for="idx_name" style='width: 12em;display:inline-block') Index Name:
+        sui-input#idx_name
 
-            sui-select(style="width: 6em;margin-bottom:1em;" @change="indexType=$event.target.value")
-              // change input box type directly from @change by using $event object.
-              // see how v-bind is used on sui-input
-              option(value="text" selected) String
-              option(value="number") Number
-            span &nbsp;&nbsp;
-            sui-input#idx_val(:type="indexType" placeholder="Value" style='width:220px;margin-bottom:1em;')
+        br
 
-          br
+        label(style='width: 12em;display:inline-block') Index Value:
+        div(style="display:inline-block;margin-bottom:0;")
+          // wrap content that you don't want it to break
 
-          label(for="tag" style='display:block') Tag:
-          sui-input#tag
+          sui-select(style="width: 6em;margin-bottom:1em;" @change="indexType=$event.target.value")
+            // change input box type directly from @change by using $event object.
+            // see how v-bind is used on sui-input
+            option(value="text" selected) String
+            option(value="number") Number
+          span &nbsp;&nbsp;
+          sui-input#idx_val(:type="indexType" placeholder="Value" style='width:220px;margin-bottom:1em;')
 
-          br
+        br
 
-          template(v-if="searchTarget === 'table'")
-            label(for="ref_id" style='display:block') Reference ID:
-            sui-input#ref_id(placeholder="Record ID")
+        label(for="tag" style='width: 12em;display:inline-block') Tag:
+        sui-input#tag
+
+        br
+
+        template(v-if="searchTarget === 'table'")
+          label(for="ref_id" style='width: 12em;display:inline-block') Reference ID:
+          sui-input#ref_id(placeholder="Record ID")
 
           br
 
@@ -170,10 +143,7 @@
             span Table Size
             span Number Of Records
             span
-        .pagination
-          span(@click="createTbl") Prev
-          div 1 2 3 4 ...
-          span(@click="createTbl") Next
+
         .slot(v-for="(i, tbl) in tblList")
           // this is list of data
           .par(@click="generateList(tbl)")
@@ -187,7 +157,10 @@
               span User: {{item.user}}
               span index: {{item.idx}}
 
-
+      .pagination
+        span(@click="createTbl") Prev
+        div 1 2 3 4 ...
+        span(@click="createTbl") Next
 
 </template>
 <script setup>
@@ -239,9 +212,6 @@ function generateList(tbl) {
 
 </script>
 <style lang="less" scoped>
-.sectionDetail{
-  &>*{margin-bottom: 1em;}
-}
 .shell {
   // this is a whole display
   min-height: 100vh;
@@ -310,10 +280,10 @@ sui-select option {
   background-color: white;
 }
 
-sui-input:not([type='radio']) {
+sui-input {
   background-color: rgba(255, 255, 255, 0.08);
   border: none; // border needs to be none for skapi web admin
-  width: 300px;
+  width: 324px;
 
   input::placeholder {
     color: rgba(255 255 255 / 0.66)
@@ -411,7 +381,7 @@ sui-input:not([type='radio']) {
   .pagination {
     display: flex;
     width: 100%;
-    justify-content: end;
+    justify-content: space-between;
     margin: 1em 0;
 
     span {

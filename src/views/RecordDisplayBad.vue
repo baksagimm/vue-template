@@ -128,9 +128,9 @@
               span index: {{item.idx}}
 
       .pagination
-        span(@click="createData('table', tblList)") Prev
+        span(@click="tblList = createData('table')") Prev
         div 1 2 3 4 ...
-        span(@click="createData('table', tblList)") Next
+        span(@click="tblList= createData('table')") Next
 
 </template>
 <script setup>
@@ -157,7 +157,7 @@ function setIndexType(e) {
 
 // just because you got rid of the code on this page to another,
 // it does not mean it's well organized.
-createData('table', tblList);
+tblList.value = createData('table');
 
 // ...and also note, short code does not always mean it's efficient.
 // sometimes more code is required for efficient computation.
