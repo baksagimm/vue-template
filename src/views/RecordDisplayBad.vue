@@ -159,9 +159,6 @@ function setIndexType(e) {
 // it does not mean it's well organized.
 tblList.value = createData('table');
 
-// ...and also note, short code does not always mean it's efficient.
-// sometimes more code is required for efficient computation.
-
 </script>
 <style lang="less" scoped>
 .shell {

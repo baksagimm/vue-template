@@ -19,6 +19,7 @@
       div
         span Raffina
         div
+          // sometimes &nbsp; is more easier than styling margins
           span Dashboard&nbsp;
           span Documentation&nbsp;
           span Account Setting&nbsp;
@@ -49,91 +50,111 @@
       br
       br
 
-      // styling effect of select box varies across os and browsers.
-      // please check the style section below.
-      sui-select(@change="searchTarget=$event.target.value" style="margin-bottom:1em;")
-        option(value="table" selected) Table name
-        option(value="user") User ID
-        option(value="record") Record ID
+      .selectInput
+        // styling effect of select box varies across os and browsers.
+        // please check the style section below.
+        sui-select(@change="searchTarget=$event.target.value")
+          option(value="table" selected) Table name
+          option(value="user") User ID
+          option(value="record") Record ID
 
-      // sometimes it's okay to use dummy spaces instead of margins.
-      // in some cases it's more safer then using margin when small display starts to wrap the div contents.
-      // ex) when margin is used, child margins can be responsible for pushing the document width further than the parent.
-      span &nbsp;&nbsp;
+        // check the input box style example for dark admin pages.
+        // border needs to be removed, and background color needs to be set.
+        // ! check the style sections !
+        sui-input(type='search' placeholder="Search" style="max-width:calc(100% - 14.5em);min-width:6em;")
 
-      // check the input box style example for dark admin pages.
-      // border needs to be removed, and background color needs to be set.
-      // ! check the style sections !
-      sui-input(type='search' placeholder="Search" style="margin-bottom:1em;")
+        span(style="margin: 0 1em;" @click="isAdvancedSearch=true") Some Icon
 
+      sui-button(v-if='!isAdvancedSearch || searchTarget === "record"') Search
+      br
       br
 
-      .searchOptions(v-if="searchTarget !== 'record'")
-        // this is where you see detailed search options
-        // note depending on the main search target, additional search option is bit different.
-        // try it out from the ui
+      // we can use full screen dummy clicker for closing advanced search
+      div(style='position: fixed;top: 0;bottom: 0;left: 0;right: 0;' v-if='isAdvancedSearch && searchTarget !== "record"' @click="isAdvancedSearch = false;")
+      
+      // advanced search box
+      .advancedSearch(v-if='isAdvancedSearch && searchTarget !== "record"')
 
-        // when composing contents make sure it breaks properly.
-        // notice here, we are using single break lines with margin-bottom.
+        h4 Access Group
+        div(style="display:inline-block;margin-right:1em")
+          label(for='access_group_reg' style="opacity:0.6") Registered&nbsp;&nbsp;
+          sui-input#access_group_reg(type='radio' value='1' name='access_group' checked)
 
-        label(for="access_group" style='width: 12em;display:inline-block') Access Group:
-        sui-select#access_group(style="width:324px")
-          option(value="1" selected) Registered
-          option(value="0" selected) Public
-          option(value="private" selected) Private
+        div(style="display:inline-block;margin-right:1em")
+          label(for='access_group_pub' style="opacity:0.6") Public&nbsp;&nbsp;
+          sui-input#access_group_pub(type='radio' value='0' name='access_group')
 
+        div(style="display:inline-block;margin-right:1em")
+          label(for='access_group_priv' style="opacity:0.6") Private&nbsp;&nbsp;
+          sui-input#access_group_priv(type='radio' value='private' name='access_group')
+
+        br
         br
 
         template(v-if="searchTarget==='user'")
-          label(for="table" style='width: 12em;display:inline-block') Table Name:
-          sui-input#table(placeholder="Table Name")
+          h4 Subscription Table
+          div(style="display:inline-block;margin-right:1em")
+            label(for='subr_none' style="opacity:0.6") None&nbsp;&nbsp;
+            sui-input#subr_none(type='radio' value='null' name='subscription_group' checked)
+          div(style="display:inline-block;margin-right:1em")
+            label(for='subr_public' style="opacity:0.6") Public&nbsp;&nbsp;
+            sui-input#subr_public(type='radio' value='0' name='subscription_group')
+          div(style="display:inline-block;margin-right:1em")
+            label(for='subr_sub' style="opacity:0.6") Subscribed&nbsp;&nbsp;
+            sui-input#subr_sub(type='radio' value='1' name='subscription_group')
 
           br
-
-          label(for="subs" style='width: 12em;display:inline-block') Subscription Table:
-          sui-select#subs(style="width:324px")
-            option(value="subscr") Subscribed
-            option(value="public") Public
-
           br
 
-        label(for="idx_name" style='width: 12em;display:inline-block') Index Name:
-        sui-input#idx_name
+          h4 Table Name
+          sui-input(placeholder="Table Name")
+
+          br
+          br
+
+        h4 Index
+        sui-input(placeholder="Index Name")
 
         br
 
-        label(style='width: 12em;display:inline-block') Index Value:
-        div(style="display:inline-block;margin-bottom:0;")
-          // wrap content that you don't want it to break
+        sui-select(style="width: 6em;" @change="indexType=$event.target.value")
+          // change input box type directly from @change by using $event object.
+          // see how v-bind is used on sui-input
+          option(value="text" selected) String
+          option(value="number") Number
 
-          sui-select(style="width: 6em;margin-bottom:1em;" @change="indexType=$event.target.value")
-            // change input box type directly from @change by using $event object.
-            // see how v-bind is used on sui-input
-            option(value="text" selected) String
-            option(value="number") Number
-          span &nbsp;&nbsp;
-          sui-input#idx_val(:type="indexType" placeholder="Value" style='width:220px;margin-bottom:1em;')
+        .selectInput(style="max-width:400px;")
+          // styling effect of select box varies across os and browsers.
+          // please check the style section below.
+          sui-select(style="width: 9em;")
+            option(value=">" selected) Greater Than
+            option(value="<") Less Than
+
+          sui-input(style='max-width:calc(100% - 9.25em)' :type="indexType" placeholder="Value")
 
         br
+        br
 
-        label(for="tag" style='width: 12em;display:inline-block') Tag:
-        sui-input#tag
+        h4 Tags
+        sui-input
 
+        br
         br
 
         template(v-if="searchTarget === 'table'")
-          label(for="ref_id" style='width: 12em;display:inline-block') Reference ID:
-          sui-input#ref_id(placeholder="Record ID")
+          h4 Reference ID
+          sui-input(placeholder="Record ID")
 
-          br
+        br
+        br
+        br
 
-        div(style="text-align:right;margin-bottom: 0;")
-          // you can use additional div to position the child
-          sui-button Search
+        div(style="text-align:center")
+          sui-button(@click="closeAdvancedSearch") Search
 
       br
 
-      .panel
+      .database
         // this is where you see the database
 
         .slot
@@ -152,27 +173,47 @@
             span {{i.count}}
             span +
           .nest-shell(:style="{height: recArr[tbl] ? '60vh' : '0vh'}")
-            .nest(v-if='recArr[tbl]' v-for="item in recArr[tbl]")
-              span Uploaded: {{item.upl}}
-              span User: {{item.user}}
-              span index: {{item.idx}}
+            .nest(v-if='recArr[tbl]' v-for="(item, id) in recArr[tbl]" @click="showRecord(item)")
+              span UPLOAD:&nbsp;
+                span {{item.upl}}&nbsp;&nbsp;&nbsp;
+              span USER:&nbsp;
+                span {{item.user}}&nbsp;&nbsp;&nbsp;
+              span INDEX:&nbsp;
+                span {{item.idx}}&nbsp;&nbsp;&nbsp;
+
+      br
 
       .pagination
-        span(@click="createTbl") Prev
-        div 1 2 3 4 ...
-        span(@click="createTbl") Next
+        span(@click="createTbl") &lt;&nbsp;&nbsp;
+        span 1 2 3 4 ...
+        span(@click="createTbl") &nbsp;&nbsp;&gt;
 
+      br
+      br
+  sui-overlay#overlay(style='background-color: rgba(0 0 0 / 50%);color:white;' transition-time='0.1s' onclick='overlay.close()')
+    div(style="display:inline-block;background:grey;max-width:600px;padding:1em;")
+      h4 Show me the record
+      p This was just a demonstration of a concept
 </template>
 <script setup>
 // setup script is basically what you run in created()
 
-import { reactive, ref } from "vue";
+import { reactive, ref, watch, nextTick, shallowReactive } from "vue";
 
 let recArr = reactive({}); // use reactive when you want the dom to be reactive to object changes
 let tblList = ref(null); // use ref when you want a reactive primitive data
 let searchTarget = ref('table');
 let indexType = ref('text');
 let overlay = ref(null); // use ref when you want to use variable to save template element
+let isAdvancedSearch = ref(false);
+
+let closeAdvancedSearch = (e) => {
+  console.log({ e });
+  console.log('yo');
+  console.log({ isAdvancedSearch });
+  isAdvancedSearch.value = false;
+  createTbl();
+};
 
 function createTbl() {
   // creates fake tables
@@ -190,6 +231,12 @@ function createTbl() {
 
 createTbl();
 
+function showRecord(item) {
+  console.log({ item, overlay });
+  // do something, then view the record
+  window.overlay.open();
+}
+
 function generateList(tbl) {
   // generates fake data
 
@@ -203,6 +250,7 @@ function generateList(tbl) {
 
   while (len--) {
     recArr[tbl].push({
+      id: window.utils.randomString(22),
       idx: window.utils.randomString(8),
       upl: `${window.utils.randomString(2, true)}:${window.utils.randomString(2, true)} / ${window.utils.randomString(4, true)}.${window.utils.randomString(2, true)}.${window.utils.randomString(2, true)}`,
       user: `${window.utils.randomString(8)}-${window.utils.randomString(4)}-${window.utils.randomString(4)}-${window.utils.randomString(4)}-${window.utils.randomString(12)}`
@@ -271,122 +319,164 @@ sui-nav {
   }
 }
 
-sui-select option {
-  // option styling varies across browser.
-  // in some browser, option inherits text colors and results in white background and white text.
-  // set the color and background of the options if parent has text color other than black.
-  // this is temporary until skateui come up with custom select box style.
-  color: black;
-  background-color: white;
-}
-
-sui-input {
-  background-color: rgba(255, 255, 255, 0.08);
-  border: none; // border needs to be none for skapi web admin
-  width: 324px;
-
-  input::placeholder {
-    color: rgba(255 255 255 / 0.66)
-  }
-}
-
 .content {
   // this is the main content
   // set max width and top margin for ideal view
-
   margin: 6em auto 0;
   max-width: 1000px;
+}
 
-  .searchOptions {
-    // box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.2), -1px -1px 1px rgba(0, 0, 0, 0.25), inset 1px 1px 1px rgba(0, 0, 0, 0.5);
-    background-color: #505050;
-    padding: 1em;
-    border-radius: 8px;
-
-    &>* {
-      margin-bottom: 1em;
-    }
+.selectInput {
+  &>* {
+    vertical-align: middle;
   }
 
-  .panel {
-    box-sizing: border-box;
-    max-width: 1000px;
-    padding: 16px 16px 1px; // cool tip: by giving 1px of padding, the child's last margin-bottom will work.
-    background: #505050;
-    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.2), -1px -1px 1px rgba(0, 0, 0, 0.25), inset 1px 1px 1px rgba(0, 0, 0, 0.5);
-    border-radius: 8px;
+  &>sui-select {
+    box-shadow: 10px 0px 0 -8px rgb(255 255 255 / 25%);
+    width: 8em;
+  }
+
+  &>span:last-child {
+    cursor: pointer;
+  }
+
+  &>sui-input {
+    box-shadow: none;
+    background-color: transparent !important;
+  }
+
+  position: relative;
+  box-shadow: -1px -1px 2px -1px rgb(0 0 0 / 50%),
+  1px 1px 1px rgb(255 255 255 / 33%),
+  inset 0 0 0 1px rgba(0 0 0 / 25%);
+  background-color: rgba(255, 255, 255, 0.08);
+  display: inline-block;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+.advancedSearch {
+  max-width: 600px;
+  line-height: 0.6;
+  display: inline-block;
+  position: absolute;
+  border: 1px solid rgba(255 255 255 / 8%);
+  box-shadow: 6px 6px 4px rgba(0 0 0 / 25%);
+  background: #505050;
+  padding: 1em;
+  border-radius: 4px;
+
+  &>* {
+    vertical-align: middle;
+    margin-bottom: .5em;
+  }
+
+  &>h4 {
+    margin-bottom: .75em;
+  }
+
+  sui-input[type='radio'] {
+    color: rgba(255 255 255 / 60%);
+
+    // adjust misalignment
+    position: relative;
+    top: 2px;
+  }
+
+  sui-input:not([type='radio']) {
+    background: rgba(255, 255, 255, 0.08);
     width: 100%;
 
-    .slot {
-      margin-bottom: 16px;
-      border-radius: 8px;
+    input::placeholder {
+      color: rgba(255 255 255 / 0.66)
+    }
+  }
+}
 
-      .nest-shell {
-        transition: height 0.1s;
-        overflow-y: auto;
+.database {
+  box-sizing: border-box;
+  max-width: 1000px;
+  padding: 16px 16px 1px; // cool tip: by giving 1px of padding, the child's last margin-bottom will work.
+  background: #505050;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.2), -1px -1px 1px rgba(0, 0, 0, 0.25), inset 1px 1px 1px rgba(0, 0, 0, 0.5);
+  border-radius: 8px;
+  width: 100%;
+
+  .slot {
+    margin-bottom: 16px;
+    border-radius: 8px;
+
+    .nest-shell {
+      transition: height 0.1s;
+      overflow-y: auto;
+      font-family: monospace;
+      font-size: 12px;
+    }
+
+    &:first-child {
+      &>.par {
+        background-color: transparent;
       }
 
-      &:first-child {
-        &>.par {
-          background-color: transparent;
-        }
-
-        color: rgba(255, 255, 255, 0.4);
-
-        .par {
-          padding-bottom: 0;
-          cursor: default;
-        }
-      }
-
-      &:not(:first-child) {
-        background: #434343;
-      }
-
-      .nest {
-        display: flex;
-        padding: 18px;
-        width: 100%;
-        box-sizing: border-box;
-
-        &>span {
-          flex-grow: 1;
-        }
-
-        &:hover {
-          cursor: pointer;
-          background-color: rgba(0 0 0 / 0.1);
-        }
-      }
+      color: rgba(255, 255, 255, 0.4);
 
       .par {
-        cursor: pointer;
-        border-radius: 8px;
-        background: #656565;
-        display: flex;
-        align-items: center;
-        padding: 14px;
+        padding-bottom: 0;
+        cursor: default;
+      }
+    }
+
+    &:not(:first-child) {
+      background: #262626;
+    }
+
+    .nest {
+      display: block;
+      padding: calc(18px - 0.5em) 18px;
+      width: 100%;
+      box-sizing: border-box;
+
+      &>span {
+        display: inline-block;
+        color: rgba(255 255 255 / 60%);
+        margin: 0.5em 0;
 
         &>span {
-          width: 25%;
+          display: inline-block;
+          color: white;
+        }
+      }
 
-          &:last-child {
-            text-align: right;
-          }
+      &:hover {
+        cursor: pointer;
+        background-color: rgba(255 255 255 / 0.1);
+      }
+    }
+
+    .par {
+      cursor: pointer;
+      border-radius: 8px;
+      background: #656565;
+      padding: 14px;
+
+      &>span {
+        display: inline-block;
+        width: 25%;
+
+        &:last-child {
+          text-align: right;
         }
       }
     }
   }
+}
 
-  .pagination {
-    display: flex;
-    width: 100%;
-    justify-content: space-between;
-    margin: 1em 0;
+.pagination {
+  text-align: center;
+  cursor: pointer;
 
-    span {
-      cursor: pointer;
-    }
+  span {
+    cursor: pointer;
   }
 }
 </style>
