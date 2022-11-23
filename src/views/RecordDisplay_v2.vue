@@ -49,22 +49,23 @@
       br
       br
 
-      // styling effect of select box varies across os and browsers.
-      // please check the style section below.
-      sui-select(@change="searchTarget=$event.target.value" style="margin-bottom:1em;")
-        option(value="table" selected) Table name
-        option(value="user") User ID
-        option(value="record") Record ID
+      .selectInput
+        // styling effect of select box varies across os and browsers.
+        // please check the style section below.
+        sui-select(@change="searchTarget=$event.target.value")
+          option(value="table" selected) Table name
+          option(value="user") User ID
+          option(value="record") Record ID
 
-      // sometimes it's okay to use dummy spaces instead of margins.
-      // in some cases it's more safer then using margin when small display starts to wrap the div contents.
-      // ex) when margin is used, child margins can be responsible for pushing the document width further than the parent.
-      span &nbsp;&nbsp;
+        // sometimes it's okay to use dummy spaces instead of margins.
+        // in some cases it's more safer then using margin when small display starts to wrap the div contents.
+        // ex) when margin is used, child margins can be responsible for pushing the document width further than the parent.
+        span &nbsp;&nbsp;
 
-      // check the input box style example for dark admin pages.
-      // border needs to be removed, and background color needs to be set.
-      // ! check the style sections !
-      sui-input(type='search' placeholder="Search" style="margin-bottom:1em;")
+        // check the input box style example for dark admin pages.
+        // border needs to be removed, and background color needs to be set.
+        // ! check the style sections !
+        sui-input(type='search' placeholder="Search")
 
       br
 
@@ -271,13 +272,39 @@ sui-nav {
   }
 }
 
+.selectInput {
+  &>sui-select {
+    box-shadow: none;
+    width: 8em;
+    border-radius: none !important;
+  }
+  
+  &>span {
+    box-shadow: -1px 0 0 0 rgba(255 255 255 / 25%), inset 1px 0 0 0 rgba(255 255 255 / 15%);
+  }
+
+  &>sui-input {
+    box-shadow: none;
+    background-color: transparent;
+    border-radius: none !important;
+  }
+  box-shadow:
+    -1px -1px 2px -1px rgb(0 0 0 / 50%),
+    1px 1px 1px rgb(255 255 255 / 33%),
+    inset 0 0 0 1px rgba(0 0 0 / 25%);
+  background-color: rgba(255, 255, 255, 0.08);
+  display: inline-block;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
 sui-select option {
   // option styling varies across browser.
   // in some browser, option inherits text colors and results in white background and white text.
   // set the color and background of the options if parent has text color other than black.
   // this is temporary until skateui come up with custom select box style.
-  color: black;
-  background-color: white;
+  // color: black;
+  // background-color: white;
 }
 
 sui-input {
@@ -298,7 +325,7 @@ sui-input {
   max-width: 1000px;
 
   .searchOptions {
-    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.2), -1px -1px 1px rgba(0, 0, 0, 0.25), inset 1px 1px 1px rgba(0, 0, 0, 0.5);
+    // box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.2), -1px -1px 1px rgba(0, 0, 0, 0.25), inset 1px 1px 1px rgba(0, 0, 0, 0.5);
     background-color: #505050;
     padding: 1em;
     border-radius: 8px;
