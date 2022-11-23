@@ -66,73 +66,65 @@
         // border needs to be removed, and background color needs to be set.
         // ! check the style sections !
         sui-input(type='search' placeholder="Search")
-
+      span &nbsp;&nbsp;
+      sui-button(@click="isAdvancedSearch=true") Advanced search
       br
-
-      .searchOptions(v-if="searchTarget !== 'record'")
-        // this is where you see detailed search options
-        // note depending on the main search target, additional search option is bit different.
-        // try it out from the ui
-
-        // when composing contents make sure it breaks properly.
-        // notice here, we are using single break lines with margin-bottom.
-
-        label(for="access_group" style='width: 12em;display:inline-block') Access Group:
-        sui-select#access_group(style="width:324px")
-          option(value="1" selected) Registered
-          option(value="0" selected) Public
-          option(value="private" selected) Private
-
-        br
+      .advancedSearch(v-if='isAdvancedSearch')
+        .searchSection
+          span Access Group
+          label(for='access_group_reg' style="opacity:0.6") Registered&nbsp;&nbsp;
+          sui-input#access_group_reg(type='radio' value='1' name='access_group')
+          span &nbsp;&nbsp;&nbsp;&nbsp;
+          label(for='access_group_pub' style="opacity:0.6") Public&nbsp;&nbsp;
+          sui-input#access_group_pub(type='radio' value='0' name='access_group')
+          span &nbsp;&nbsp;&nbsp;&nbsp;
+          label(for='access_group_priv' style="opacity:0.6") Private&nbsp;&nbsp;
+          sui-input#access_group_priv(type='radio' value='private' name='access_group')
 
         template(v-if="searchTarget==='user'")
-          label(for="table" style='width: 12em;display:inline-block') Table Name:
-          sui-input#table(placeholder="Table Name")
+          .searchSection
+            span Table Name
+            sui-input#table(placeholder="Table Name")
+
+          .searchSection
+            span Subscription Table
+            sui-select#subs
+              option(value="subscr") Subscribed
+              option(value="public") Public
+
+        .searchSection
+          span Index
+          sui-input#idx_name(placeholder="Index Name")
 
           br
 
-          label(for="subs" style='width: 12em;display:inline-block') Subscription Table:
-          sui-select#subs(style="width:324px")
-            option(value="subscr") Subscribed
-            option(value="public") Public
-
-          br
-
-        label(for="idx_name" style='width: 12em;display:inline-block') Index Name:
-        sui-input#idx_name
-
-        br
-
-        label(style='width: 12em;display:inline-block') Index Value:
-        div(style="display:inline-block;margin-bottom:0;")
-          // wrap content that you don't want it to break
-
-          sui-select(style="width: 6em;margin-bottom:1em;" @change="indexType=$event.target.value")
+          sui-select(style="width: 6em;" @change="indexType=$event.target.value")
             // change input box type directly from @change by using $event object.
             // see how v-bind is used on sui-input
             option(value="text" selected) String
             option(value="number") Number
-          span &nbsp;&nbsp;
-          sui-input#idx_val(:type="indexType" placeholder="Value" style='width:220px;margin-bottom:1em;')
 
-        br
+          .selectInput
+            // styling effect of select box varies across os and browsers.
+            // please check the style section below.
+            sui-select(style="width: 9em;")
+              option(value=">" selected) Greater Than
+              option(value="<") Less Than
 
-        label(for="tag" style='width: 12em;display:inline-block') Tag:
-        sui-input#tag
+            sui-input#idx_val(:type="indexType" placeholder="Value")
 
-        br
+        .searchSection
+          span Tag
+          sui-input#tag
 
-        template(v-if="searchTarget === 'table'")
-          label(for="ref_id" style='width: 12em;display:inline-block') Reference ID:
+        .searchSection(v-if="searchTarget === 'table'")
+          span Reference ID
           sui-input#ref_id(placeholder="Record ID")
 
-          br
-
-        div(style="text-align:right;margin-bottom: 0;")
-          // you can use additional div to position the child
-          sui-button Search
+        sui-button(@click="closeAdvancedSearch") Search
 
       br
+
 
       .panel
         // this is where you see the database
@@ -153,7 +145,7 @@
             span {{i.count}}
             span +
           .nest-shell(:style="{height: recArr[tbl] ? '60vh' : '0vh'}")
-            .nest(v-if='recArr[tbl]' v-for="item in recArr[tbl]")
+            .nest(v-if='recArr[tbl]' v-for="item in recArr[tbl]" @click="showRec(item)")
               span Uploaded: {{item.upl}}
               span User: {{item.user}}
               span index: {{item.idx}}
@@ -162,18 +154,42 @@
         span(@click="createTbl") Prev
         div 1 2 3 4 ...
         span(@click="createTbl") Next
-
+  sui-overlay(ref='overlay' overlayColor='rgba(0 0 0 / 50%)' transition-time='0.1s' @click='overlay.close()')
+    div(style="display:flex;background:grey;width:500px;height:600px;color:white;justify-content:center;align-items:center;")
+      p HI
 </template>
 <script setup>
 // setup script is basically what you run in created()
 
-import { reactive, ref } from "vue";
+import { reactive, ref, watch, nextTick, shallowReactive } from "vue";
 
 let recArr = reactive({}); // use reactive when you want the dom to be reactive to object changes
 let tblList = ref(null); // use ref when you want a reactive primitive data
 let searchTarget = ref('table');
 let indexType = ref('text');
 let overlay = ref(null); // use ref when you want to use variable to save template element
+let isAdvancedSearch = ref(false);
+
+let closeAdvancedSearch=(e)=> {
+  console.log({ e });
+  console.log('yo');
+  console.log({isAdvancedSearch})
+  isAdvancedSearch.value = false;
+  createTbl();
+}
+
+// watch(isAdvancedSearch, (nv, ov) => {
+//   console.log({ nv, ov });
+//   nextTick(() => {
+//     if (nv) {
+//       document.body.addEventListener('click', closeAdvancedSearch);
+//     }
+//     else {
+//       document.body.removeEventListener('click', closeAdvancedSearch);
+//     }
+//   });
+
+// });
 
 function createTbl() {
   // creates fake tables
@@ -190,7 +206,10 @@ function createTbl() {
 }
 
 createTbl();
-
+function showRec(item){
+  console.log({item, overlay})
+  overlay.value.open();
+}
 function generateList(tbl) {
   // generates fake data
 
@@ -273,49 +292,41 @@ sui-nav {
 }
 
 .selectInput {
+
   &>sui-select {
     box-shadow: none;
     width: 8em;
-    border-radius: none !important;
   }
-  
+
   &>span {
     box-shadow: -1px 0 0 0 rgba(255 255 255 / 25%), inset 1px 0 0 0 rgba(255 255 255 / 15%);
   }
 
   &>sui-input {
     box-shadow: none;
-    background-color: transparent;
-    border-radius: none !important;
+    background-color: transparent !important;
   }
-  box-shadow:
-    -1px -1px 2px -1px rgb(0 0 0 / 50%),
-    1px 1px 1px rgb(255 255 255 / 33%),
-    inset 0 0 0 1px rgba(0 0 0 / 25%);
+
+  box-shadow: -1px -1px 2px -1px rgb(0 0 0 / 50%),
+  1px 1px 1px rgb(255 255 255 / 33%),
+  inset 0 0 0 1px rgba(0 0 0 / 25%);
+
   background-color: rgba(255, 255, 255, 0.08);
+
   display: inline-block;
   border-radius: 4px;
   box-sizing: border-box;
 }
 
-sui-select option {
-  // option styling varies across browser.
-  // in some browser, option inherits text colors and results in white background and white text.
-  // set the color and background of the options if parent has text color other than black.
-  // this is temporary until skateui come up with custom select box style.
-  // color: black;
-  // background-color: white;
-}
+// sui-input {
+//   background-color: rgba(255, 255, 255, 0.08);
+//   border: none; // border needs to be none for skapi web admin
+//   width: 324px;
 
-sui-input {
-  background-color: rgba(255, 255, 255, 0.08);
-  border: none; // border needs to be none for skapi web admin
-  width: 324px;
-
-  input::placeholder {
-    color: rgba(255 255 255 / 0.66)
-  }
-}
+//   input::placeholder {
+//     color: rgba(255 255 255 / 0.66)
+//   }
+// }
 
 .content {
   // this is the main content
@@ -324,13 +335,58 @@ sui-input {
   margin: 6em auto 0;
   max-width: 1000px;
 
+  .advancedSearch {
+    display: inline-block;
+    position: absolute;
+    box-shadow: 5px 5px 5px black;
+    // line-height: 1.5;
+    background: #505050;
+    padding: 1em;
+    border-radius: 8px;
+
+    .searchSection {
+      sui-input[type='radio'] {
+        color: rgba(255 255 255 / 60%);
+        // vertical-align: top;
+      }
+
+      sui-input:not([type='radio']) {
+        background: rgba(255, 255, 255, 0.08);
+        width: 447px;
+      }
+
+      sui-select {
+        margin-right: .25em;
+
+        &+sui-input {
+          width: unset !important;
+        }
+      }
+
+      &>* {
+        margin: 0 0 1em 0;
+        vertical-align: text-top;
+      }
+
+      &>span:first-child {
+        display: block;
+        margin: 1em 0 .75em 0;
+        font-weight: bold;
+      }
+    }
+
+    &>*:not(*:last-child) {
+      margin-bottom: 1em;
+    }
+  }
+
   .searchOptions {
     // box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.2), -1px -1px 1px rgba(0, 0, 0, 0.25), inset 1px 1px 1px rgba(0, 0, 0, 0.5);
     background-color: #505050;
     padding: 1em;
     border-radius: 8px;
 
-    &>* {
+    &>*:not(*:last-child) {
       margin-bottom: 1em;
     }
   }
