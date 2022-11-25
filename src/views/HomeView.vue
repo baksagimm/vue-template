@@ -33,6 +33,12 @@ main
       | Bad example of HTML programming that many developers can easily fall into.#[br]
       | Example is based on 'Record Display' page.
 
+    br
+    
+    li
+      RouterLink(to="/using-forms") Example of using forms#[br]
+      | Reactivity and Refs.
+
 </template>
 
 <style lang="less">

@@ -21,6 +21,14 @@ const router = createRouter({
       path: '/record-display-bad',
       name: 'recordDisplayBad',
       component: () => import('../views/RecordDisplayBad.vue')
+    },
+    {
+      path: '/using-forms',
+      name: 'usingForms',
+      // route level code-splitting
+      // this generates a separate chunk (About.[hash].js) for this route
+      // which is lazy-loaded when the route is visited.
+      component: () => import('../views/UsingForms.vue')
     }
   ]
 })

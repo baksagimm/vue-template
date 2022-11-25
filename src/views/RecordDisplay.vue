@@ -198,7 +198,7 @@
 <script setup>
 // setup script is basically what you run in created()
 
-import { reactive, ref, watch, nextTick, shallowReactive } from "vue";
+import { reactive, ref } from "vue";
 
 let recArr = reactive({}); // use reactive when you want the dom to be reactive to object changes
 let tblList = ref(null); // use ref when you want a reactive primitive data
