@@ -17,7 +17,7 @@ main
 
     li.
       Vite seems to have quirks when hot reloading custom components. (ex. undefined components)#[br]
-      But it goes away when reloaded manually.
+      But it goes away when restarted manually.
 
   h2 Pages:
   ul
@@ -37,7 +37,8 @@ main
     
     li
       RouterLink(to="/using-forms") Example of using forms#[br]
-      | Reactivity and Refs.
+      | Example of using skateui with forms.#[br]
+      | Also shows how to do form validations.#[br]
 
 </template>
 
