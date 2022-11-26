@@ -31,7 +31,7 @@ main
     li
       RouterLink(to="/record-display-bad") Bad example of HTML design#[br]
       | Bad example of HTML programming that many developers can easily fall into.#[br]
-      | Example is based on 'Record Display' page.
+      | Example is based on 'Record Display (version 1)'.
 
     br
     

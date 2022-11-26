@@ -44,7 +44,7 @@
       // try to find this margin-bottom styling from the style section.
 
       div(style='margin-bottom:1em;')
-        sui-select(@change="setSearch" style="margin-bottom:1em;")
+        sui-select(@change="setSearch")
           // @change is now a function. try to find it in script tag.
           option(value="table" selected) Table name
           option(value="user") User ID

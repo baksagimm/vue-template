@@ -63,7 +63,7 @@
         // ! check the style sections !
         sui-input(type='search' placeholder="Search" style="max-width:calc(100% - 14.5em);min-width:6em;")
 
-        span(style="margin: 0 1em;" @click="isAdvancedSearch=true") Some Icon
+        span(style="margin: 0 1em;" @click="isAdvancedSearch=searchTarget !== 'record'") Some Icon
 
       sui-button(v-if='!isAdvancedSearch || searchTarget === "record"') Search
       br
@@ -143,7 +143,7 @@
 
         template(v-if="searchTarget === 'table'")
           h4 Reference ID
-          sui-input(placeholder="Record ID")
+          sui-input(placeholder="Record ID | User ID")
 
         br
         br
