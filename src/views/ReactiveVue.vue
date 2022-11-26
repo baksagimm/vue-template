@@ -18,7 +18,10 @@
         HTML element can be also be nested in ref object.#[br]
         But since ref attribute reads data.nestedEl as a whole keyname,#[br]
         We need to use ref callback.#[br]
-        On ref callback incomming argument is the element.
+        On ref callback incomming argument is the element.#[br]
+        #[br]
+        Note that assigning ref is wrapping the whole html element into a proxy object.#[br]
+        If you don't need any reactivity, sometime it's more lighter to use vanilla js getElement.
 
     sui-button(@click="e=>{log(data)}") Log It
 
@@ -62,6 +65,9 @@
     hr
 
     pre {{dataReact}}
+    
+    br
+    
     template(v-if="dataReact.deep")
 
         p.
@@ -69,7 +75,7 @@
             Unlike ref, reactive doesnt require ".value" to access the value.#[br]
             Same as ref, reactive object also tracks deep nested data.
 
-        p current value: {{dataReact.deep.nested}}
+        p current value: {{dataReact.deep}}
         sui-button(@click="()=>dataReact.deep.nested++") Increment value
 
         br
@@ -85,6 +91,7 @@
 
     sui-button(@click="()=>dataReact={newData:'Hello'}") Change whole value
 
+    br
     br
 
     h1 Wrap only the stuff you need
@@ -112,7 +119,18 @@
 
     p {{dataReactDetached.deep}}
     p current value (detached): {{deep}}
+    
     sui-button(@click="()=>deep++") Increment detached value
+    
+    br
+    br
+
+    sui-button(@click='()=>log(dataReactDetached)') Log Detached Object
+    
+    br
+    br
+    
+    sui-button(@click='()=>log(dataReact)') Log Wrapped Object
 
     br
     br
@@ -123,7 +141,9 @@
     p.
         Below is a computed property reading user.name#[br]
         Computed runs every time is read.#[br]
-        It can be seen as a reactive getter.
+        It can be seen as a reactive getter.#[br]
+        Try to avoid watch, computed if you are not displaying the data in the template.#[br]
+        You can always use vanila getters and setters without needing to wrap the object into reactive.
 
     p - {{baksaName}}
 
