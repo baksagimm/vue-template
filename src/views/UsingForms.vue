@@ -135,6 +135,11 @@ div(style="max-width:1000px;margin:auto;")
 
         sui-input(type='submit')
 
+        br
+        br
+        br
+        br
+
 </template>
 <script setup>
 import { ref } from "vue";

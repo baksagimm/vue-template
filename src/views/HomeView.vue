@@ -40,6 +40,13 @@ main
       | Example of using skateui with forms.#[br]
       | Also shows how to do form validations.#[br]
 
+    br
+    
+    li
+      RouterLink(to="/reactive-vue") Reactive Vue#[br]
+      | Explains how vue reactive works.#[br]
+      | Irons out some confusion among frontend dev.#[br]
+
 </template>
 
 <style lang="less">
