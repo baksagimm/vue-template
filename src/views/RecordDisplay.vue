@@ -351,6 +351,8 @@ function createTbl() {
 createTbl();
 
 onMounted(() => {
+  // if watch is used with immediate option,
+  // run watch inside onmounted
   watch(route,
     (r) => {
       let query = r.query;
