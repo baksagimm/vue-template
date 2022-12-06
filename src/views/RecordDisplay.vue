@@ -385,9 +385,10 @@ function showRecord(item) {
 }
 
 function generateList(tbl) {
-  // generates fake data
+  
   let toRoute = { name: 'recordDisplay' };
   if (recArr[tbl]) {
+    // close if it was already open
     delete recArr[tbl];
     router.push(toRoute);
     return;
@@ -397,7 +398,7 @@ function generateList(tbl) {
 
   let len = 100;
   recArr[tbl] = [];
-
+  // generates fake data (fetching data)
   while (len--) {
     recArr[tbl].push({
       id: window.utils.randomString(22),
