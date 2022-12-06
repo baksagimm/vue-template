@@ -14,7 +14,7 @@
     // this is the content section right beside the side nav bar.
     // flex-grow is to expand the width.
 
-    sui-nav(auto-hide)
+    sui-nav.headNav(auto-hide)
       // sui-nav check skateui details for more info
       div
         span Raffina
@@ -71,7 +71,7 @@
 
       // we can use full screen dummy clicker for closing advanced search
       div(style='position: fixed;top: 0;bottom: 0;left: 0;right: 0;' v-if='isAdvancedSearch && searchTarget !== "record"' @click="isAdvancedSearch = false;")
-      
+
       // advanced search box
       .advancedSearch(v-if='isAdvancedSearch && searchTarget !== "record"')
 
@@ -167,12 +167,15 @@
 
         .slot(v-for="(i, tbl) in tblList")
           // this is list of data
+          // when table is open, most recently clicked table name is the value of the route query.
+          // table value query is only needed for mobile
           .par(@click="generateList(tbl)")
             span tbl-{{tbl}}
             span {{i.size}}
             span {{i.count}}
             span +
           .nest-shell(:style="{height: recArr[tbl] ? '60vh' : '0vh'}")
+            // showRecord takes user to the route with query value
             .nest(v-if='recArr[tbl]' v-for="(item, id) in recArr[tbl]" @click="showRecord(item)")
               span UPLOAD:&nbsp;
                 span {{item.upl}}&nbsp;&nbsp;&nbsp;
@@ -190,27 +193,143 @@
 
       br
       br
-  sui-overlay#overlay(style='background-color: rgba(0 0 0 / 50%);color:white;' transition-time='0.1s' onclick='overlay.close()')
-    div(style="display:inline-block;background:grey;max-width:600px;padding:1em;")
-      h4 Show me the record
-      p This was just a demonstration of a concept
+  
+  // closing overlay is going back one history
+  sui-overlay#overlay(style='background-color: rgba(0 0 0 / 50%);color:white;' transition-time='0.1s' @click="router.go(-1)" onclick='overlay.close()')
+    .showRecord(v-if="currentRecord")
+      .title
+        h2 record id: {{currentRecord.id}}
+      .tab
+        span(:selected='currentRecordView === "info" ? true : null' @click="currentRecordView = 'info'") Information
+        span(:selected='currentRecordView === "record" ? true : null' @click="currentRecordView = 'record'")  Record
+
+      .record(v-if="currentRecordView === 'info'")
+        div
+          span Record ID:
+          span {{currentRecord.id}}
+        div
+          span Table Name:
+          span Asian Spice House
+        div
+          span Reference ID:
+          span {{currentRecord.id}}
+        div
+          span User ID:
+          span {{currentRecord.user}}
+        div
+          span Uploaded:
+          span {{currentRecord.upl}}
+      .record(v-else)
+        div
+          span Record ID:
+          span {{currentRecord.id}}
+        div
+          span Table Name:
+          span Asian Spice House
+        div
+          span Reference ID:
+          span {{currentRecord.id}}
+        div
+          span User ID:
+          span {{currentRecord.user}}
+        div
+          span Uploaded:
+          span {{currentRecord.upl}}
+        div
+          span Record ID:
+          span {{currentRecord.id}}
+        div
+          span Table Name:
+          span Asian Spice House
+        div
+          span Reference ID:
+          span {{currentRecord.id}}
+        div
+          span User ID:
+          span {{currentRecord.user}}
+        div
+          span Uploaded:
+          span {{currentRecord.upl}}
+        div
+          span Record ID:
+          span {{currentRecord.id}}
+        div
+          span Table Name:
+          span Asian Spice House
+        div
+          span Reference ID:
+          span {{currentRecord.id}}
+        div
+          span User ID:
+          span {{currentRecord.user}}
+        div
+          span Uploaded:
+          span {{currentRecord.upl}}
+        div
+          span Record ID:
+          span {{currentRecord.id}}
+        div
+          span Table Name:
+          span Asian Spice House
+        div
+          span Reference ID:
+          span {{currentRecord.id}}
+        div
+          span User ID:
+          span {{currentRecord.user}}
+        div
+          span Uploaded:
+          span {{currentRecord.upl}}
+        div
+          span Record ID:
+          span {{currentRecord.id}}
+        div
+          span Table Name:
+          span Asian Spice House
+        div
+          span Reference ID:
+          span {{currentRecord.id}}
+        div
+          span User ID:
+          span {{currentRecord.user}}
+        div
+          span Uploaded:
+          span {{currentRecord.upl}}
+        div
+          span Record ID:
+          span {{currentRecord.id}}
+        div
+          span Table Name:
+          span Asian Spice House
+        div
+          span Reference ID:
+          span {{currentRecord.id}}
+        div
+          span User ID:
+          span {{currentRecord.user}}
+        div
+          span Uploaded:
+          span {{currentRecord.upl}}
+      .button 
+        sui-button Edit
 </template>
 <script setup>
 // setup script is basically what you run in created()
 
-import { reactive, ref } from "vue";
-
+import { onMounted, reactive, ref, watch } from "vue";
+import { useRouter, useRoute } from 'vue-router';
+let router = useRouter();
+let route = useRoute();
 let recArr = reactive({}); // use reactive when you want the dom to be reactive to object changes
 let tblList = ref(null); // use ref when you want a reactive primitive data
 let searchTarget = ref('table');
 let indexType = ref('text');
 let overlay = ref(null); // use ref when you want to use variable to save template element
 let isAdvancedSearch = ref(false);
+let currentRecord = ref(null);
+let currentRecordView = ref('info');
 
 let closeAdvancedSearch = (e) => {
-  console.log({ e });
-  console.log('yo');
-  console.log({ isAdvancedSearch });
   isAdvancedSearch.value = false;
   createTbl();
 };
@@ -231,19 +350,50 @@ function createTbl() {
 
 createTbl();
 
+onMounted(() => {
+  watch(route,
+    (r) => {
+      let query = r.query;
+      if (query?.rid) {
+        if (!currentRecord.value) {
+          // fetch the record if there is no data
+          currentRecord.value = {
+            id: window.utils.randomString(22),
+            idx: window.utils.randomString(8),
+            upl: `${window.utils.randomString(2, true)}:${window.utils.randomString(2, true)} / ${window.utils.randomString(4, true)}.${window.utils.randomString(2, true)}.${window.utils.randomString(2, true)}`,
+            user: `${window.utils.randomString(8)}-${window.utils.randomString(4)}-${window.utils.randomString(4)}-${window.utils.randomString(4)}-${window.utils.randomString(12)}`
+          };
+        }
+
+        window.overlay.open();
+      }
+      else {
+        if (window.overlay) {
+          window.overlay.close();
+        }
+      }
+    },
+    {
+      immediate: true
+    }
+  );
+});
+
 function showRecord(item) {
-  console.log({ item, overlay });
-  // do something, then view the record
-  window.overlay.open();
+  currentRecord.value = item;
+  router.push({ name: 'recordDisplay', query: { rid: item.id } });
 }
 
 function generateList(tbl) {
   // generates fake data
-
+  let toRoute = { name: 'recordDisplay' };
   if (recArr[tbl]) {
     delete recArr[tbl];
+    router.push(toRoute);
     return;
   }
+
+  toRoute.query = { tbl };
 
   let len = 100;
   recArr[tbl] = [];
@@ -256,6 +406,7 @@ function generateList(tbl) {
       user: `${window.utils.randomString(8)}-${window.utils.randomString(4)}-${window.utils.randomString(4)}-${window.utils.randomString(4)}-${window.utils.randomString(12)}`
     });
   }
+  router.push(toRoute);
 }
 
 </script>
@@ -287,7 +438,7 @@ function generateList(tbl) {
   }
 }
 
-sui-nav {
+sui-nav.headNav {
   box-sizing: border-box;
   margin: 0;
   background: #505050;
@@ -477,6 +628,100 @@ sui-nav {
 
   span {
     cursor: pointer;
+  }
+}
+
+.showRecord {
+  display: inline-block;
+  background: #505050;
+  width: 1000px;
+  max-width: 100vw;
+  border-radius: 8px;
+  overflow: hidden;
+
+  .tab {
+    padding: 1em 1em 0 0;
+    overflow: hidden;
+
+    &>span {
+      display: inline-block;
+      padding: 1em;
+      border-top-left-radius: 8px;
+      border-top-right-radius: 8px;
+      width: 8em;
+      font-weight: bold;
+      text-align: center;
+      cursor: pointer;
+    }
+
+    &>span[selected] {
+      background-color: #656565;
+      box-shadow: 2px 2px 4px rgb(0 0 0 / 50%);
+    }
+
+    &>.slice_r {
+      &::before {
+        content: ' ';
+        display: inherit;
+      }
+
+      display: inline-block;
+      padding: 1em 4px;
+      width: 8px;
+      background-color: transparent;
+      border-bottom-left-radius: 8px;
+      box-shadow: 0px 8px #656565;
+      box-sizing: border-box;
+    }
+
+    // &>.slice_l {
+    //   &::before{
+    //     content: ' ';
+    //     display: inherit;
+    //   }
+    //   display: inline-block;
+    //   padding: 1em 4px;
+    //   width: 8px;
+    //   background-color: #505050;
+    //   border-bottom-right-radius: 8px;
+    //   box-shadow: 0px 8px #656565;
+    //   box-sizing: border-box;
+    // }
+  }
+
+  .title {
+    // box-shadow: 0px 4px 4px 0px #00000033;
+    padding: 20px 20px 7px;
+
+    h2 {
+      margin: 0;
+      font-size: 20px;
+      line-height: 1;
+    }
+  }
+
+  .record {
+    background-color: #656565;
+    padding: 1em;
+    height: 60vh;
+    max-height: calc(100vh - 150px - 6em);
+    overflow-y: auto;
+
+    &>div {
+      margin: 24px;
+
+      &>span:first-child {
+        opacity: 0.6;
+        font-weight: bold;
+        min-width: 8em;
+        display: inline-block;
+      }
+    }
+
+    &+.button {
+      padding: 1em;
+      text-align: center;
+    }
   }
 }
 </style>
