@@ -27,6 +27,13 @@ main
       | For accurate styling details, refer raffina's Figma
 
     br
+    
+    li
+      RouterLink(to="/record-display-mobile") Record Display Mobile#[br]
+      | Design concept of mobile view of record.#[br]
+      | For accurate styling details, refer raffina's Figma
+
+    br
 
     li
       RouterLink(to="/record-display-bad") Bad example of HTML design#[br]
