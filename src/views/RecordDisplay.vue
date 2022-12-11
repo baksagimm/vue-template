@@ -195,7 +195,7 @@
       br
   
   // closing overlay is going back one history
-  sui-overlay#overlay(style='background-color: rgba(0 0 0 / 50%);color:white;' transition-time='0.1s' @click="router.go(-1)" onclick='overlay.close()')
+  sui-overlay#overlay(style='background-color: rgba(0 0 0 / 70%);color:white;' transition-time='0.1s' @click="router.go(-1)" onclick='overlay.close()')
     .showRecord(v-if="currentRecord")
       .title
         h2 record id: {{currentRecord.id}}
@@ -311,7 +311,7 @@
           span Uploaded:
           span {{currentRecord.upl}}
       .button 
-        sui-button Edit
+        sui-button(style="background-color:transparent;color:white;box-shadow:none;border:1px solid white;") Edit
 </template>
 <script setup>
 // setup script is basically what you run in created()
@@ -641,7 +641,7 @@ sui-nav.headNav {
   max-width: 100vw;
   border-radius: 8px;
   overflow: hidden;
-
+  border: 1px solid #808080;
   .tab {
     padding: 1em 1em 0 0;
     overflow: hidden;
@@ -658,8 +658,7 @@ sui-nav.headNav {
     }
 
     &>span[selected] {
-      background-color: #656565;
-      box-shadow: 2px 2px 4px rgb(0 0 0 / 50%);
+      background-color: #333;
     }
 
     &>.slice_r {
@@ -676,20 +675,6 @@ sui-nav.headNav {
       box-shadow: 0px 8px #656565;
       box-sizing: border-box;
     }
-
-    // &>.slice_l {
-    //   &::before{
-    //     content: ' ';
-    //     display: inherit;
-    //   }
-    //   display: inline-block;
-    //   padding: 1em 4px;
-    //   width: 8px;
-    //   background-color: #505050;
-    //   border-bottom-right-radius: 8px;
-    //   box-shadow: 0px 8px #656565;
-    //   box-sizing: border-box;
-    // }
   }
 
   .title {
@@ -704,7 +689,7 @@ sui-nav.headNav {
   }
 
   .record {
-    background-color: #656565;
+    background-color: #333;
     padding: 1em;
     height: 60vh;
     max-height: calc(100vh - 150px - 6em);

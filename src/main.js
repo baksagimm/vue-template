@@ -16,11 +16,6 @@ window.utils = {
     }
 };
 
-import { defineCustomElements } from 'skateui/loader';
-defineCustomElements(Object.assign({
-    ce: (eventName, opts) => new CustomEvent(eventName.toLowerCase(), opts)
-  }, window));
-
 const app = createApp(App);
 
 app.use(router);
