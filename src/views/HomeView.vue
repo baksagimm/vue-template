@@ -31,7 +31,9 @@ main
     li
       RouterLink(to="/record-display-mobile") Record Display Mobile#[br]
       | Design concept of mobile view of record.#[br]
-      | For accurate styling details, refer raffina's Figma
+      | For accurate styling details, refer raffina's Figma.
+      | Reference on how you can handle navigations for canceling changes.
+      | Notice sui-nav nests the data tabs.
 
     br
 

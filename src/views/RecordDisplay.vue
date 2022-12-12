@@ -26,6 +26,11 @@
           span Logout
 
     .content
+      form
+        sui-input(ref='searchBox' type='search')
+        sui-input(type='submit' value='search')
+        sui-input(type='reset')
+
       // this is the main content box.
       // it has margin auto and max width for comfortable viewing (ref style sect.)
       // do not use flex box as a content parent unless inevitable.
@@ -150,7 +155,7 @@
         br
 
         div(style="text-align:center")
-          sui-button(@click="closeAdvancedSearch") Search
+          sui-button(@click="isAdvancedSearch = false; createTbl()") Search
 
       br
 
@@ -193,7 +198,7 @@
 
       br
       br
-  
+
   // closing overlay is going back one history
   sui-overlay#overlay(style='background-color: rgba(0 0 0 / 70%);color:white;' transition-time='0.1s' @click="router.go(-1)" onclick='overlay.close()')
     .showRecord(v-if="currentRecord")
@@ -204,114 +209,200 @@
         span(:selected='currentRecordView === "record" ? true : null' @click="currentRecordView = 'record'")  Record
 
       .record(v-if="currentRecordView === 'info'")
-        div
-          span Record ID:
-          span {{currentRecord.id}}
-        div
-          span Table Name:
-          span Asian Spice House
-        div
-          span Reference ID:
-          span {{currentRecord.id}}
-        div
-          span User ID:
-          span {{currentRecord.user}}
-        div
-          span Uploaded:
-          span {{currentRecord.upl}}
+        template(v-if="editMode")
+          p *This is just a conceptual example
+          div
+            span Table Name
+            span
+              sui-input
+          div
+            sui-input#allow_ref(type='checkbox' style="color:white;vertical-align:text-top;" @change='e=>allowReference=e.target.checked')
+            label(for='allow_ref') &nbsp;&nbsp;Allow Reference
+            template(v-if="allowReference")
+              br
+              br
+            #showRef(:style="{'background-color':'#434343','border-radius':'8px','height':allowReference ? '7.5em' : '0px'}")
+              div(style="padding: 1.5em 1em 1em;")
+                label(for='allow_mult_ref') Allow Multiple Reference&nbsp;&nbsp;
+                sui-input#allow_mult_ref(type='checkbox' style="color:white;")
+                br
+                br
+                span(style="vertical-align:super") Reference Limit&nbsp;&nbsp;
+                sui-input(type='number' placeholder="Infinite" style="box-shadow: 0 1px white; border-radius:0; width:calc(100% - 8em); min-width:6em;")
+          div
+            span Table Name
+            span
+              sui-input
+          div
+            span Table Name
+            span
+              sui-input
+          div
+            span Table Name
+            span
+              sui-input
+          div
+            span Table Name
+            span
+              sui-input
+              div
+          div
+            span Table Name
+            span
+              sui-input
+          div
+            span Table Name
+            span
+              sui-input
+          div
+            span Table Name
+            span
+              sui-input
+          div
+            span Table Name
+            span
+              sui-input
+        template(v-else)
+          div
+            span Record ID:
+            span {{currentRecord.id}}
+          div
+            span Table Name:
+            span Asian Spice House
+          div
+            span Reference ID:
+            span {{currentRecord.id}}
+          div
+            span User ID:
+            span {{currentRecord.user}}
+          div
+            span Uploaded:
+            span {{currentRecord.upl}}
       .record(v-else)
-        div
-          span Record ID:
-          span {{currentRecord.id}}
-        div
-          span Table Name:
-          span Asian Spice House
-        div
-          span Reference ID:
-          span {{currentRecord.id}}
-        div
-          span User ID:
-          span {{currentRecord.user}}
-        div
-          span Uploaded:
-          span {{currentRecord.upl}}
-        div
-          span Record ID:
-          span {{currentRecord.id}}
-        div
-          span Table Name:
-          span Asian Spice House
-        div
-          span Reference ID:
-          span {{currentRecord.id}}
-        div
-          span User ID:
-          span {{currentRecord.user}}
-        div
-          span Uploaded:
-          span {{currentRecord.upl}}
-        div
-          span Record ID:
-          span {{currentRecord.id}}
-        div
-          span Table Name:
-          span Asian Spice House
-        div
-          span Reference ID:
-          span {{currentRecord.id}}
-        div
-          span User ID:
-          span {{currentRecord.user}}
-        div
-          span Uploaded:
-          span {{currentRecord.upl}}
-        div
-          span Record ID:
-          span {{currentRecord.id}}
-        div
-          span Table Name:
-          span Asian Spice House
-        div
-          span Reference ID:
-          span {{currentRecord.id}}
-        div
-          span User ID:
-          span {{currentRecord.user}}
-        div
-          span Uploaded:
-          span {{currentRecord.upl}}
-        div
-          span Record ID:
-          span {{currentRecord.id}}
-        div
-          span Table Name:
-          span Asian Spice House
-        div
-          span Reference ID:
-          span {{currentRecord.id}}
-        div
-          span User ID:
-          span {{currentRecord.user}}
-        div
-          span Uploaded:
-          span {{currentRecord.upl}}
-        div
-          span Record ID:
-          span {{currentRecord.id}}
-        div
-          span Table Name:
-          span Asian Spice House
-        div
-          span Reference ID:
-          span {{currentRecord.id}}
-        div
-          span User ID:
-          span {{currentRecord.user}}
-        div
-          span Uploaded:
-          span {{currentRecord.upl}}
+        template(v-if="editMode")
+          p *This is just a conceptual example
+          div
+            span Table Name
+            span
+              sui-input
+          div
+            sui-input#allow_ref(type='checkbox' style="color:white;vertical-align:text-top;" @change='e=>allowReference=e.target.checked')
+            label(for='allow_ref') &nbsp;&nbsp;Allow Reference
+            template(v-if="allowReference")
+              br
+              br
+            #showRef(:style="{'background-color':'#434343','border-radius':'8px','height':allowReference ? '7.5em' : '0px'}")
+              div(style="padding: 1.5em 1em 1em;")
+                label(for='allow_mult_ref') Allow Multiple Reference&nbsp;&nbsp;
+                sui-input#allow_mult_ref(type='checkbox' style="color:white;")
+                br
+                br
+                span(style="vertical-align:super") Reference Limit&nbsp;&nbsp;
+                sui-input(type='number' placeholder="Infinite" style="box-shadow: 0 1px white; border-radius:0; width:calc(100% - 8em); min-width:6em;")
+          div
+            span Table Name
+            span
+              sui-input
+        template(v-else)
+          div
+            span Record ID:
+            span {{currentRecord.id}}
+          div
+            span Table Name:
+            span Asian Spice House
+          div
+            span Reference ID:
+            span {{currentRecord.id}}
+          div
+            span User ID:
+            span {{currentRecord.user}}
+          div
+            span Uploaded:
+            span {{currentRecord.upl}}
+          div
+            span Record ID:
+            span {{currentRecord.id}}
+          div
+            span Table Name:
+            span Asian Spice House
+          div
+            span Reference ID:
+            span {{currentRecord.id}}
+          div
+            span User ID:
+            span {{currentRecord.user}}
+          div
+            span Uploaded:
+            span {{currentRecord.upl}}
+          div
+            span Record ID:
+            span {{currentRecord.id}}
+          div
+            span Table Name:
+            span Asian Spice House
+          div
+            span Reference ID:
+            span {{currentRecord.id}}
+          div
+            span User ID:
+            span {{currentRecord.user}}
+          div
+            span Uploaded:
+            span {{currentRecord.upl}}
+          div
+            span Record ID:
+            span {{currentRecord.id}}
+          div
+            span Table Name:
+            span Asian Spice House
+          div
+            span Reference ID:
+            span {{currentRecord.id}}
+          div
+            span User ID:
+            span {{currentRecord.user}}
+          div
+            span Uploaded:
+            span {{currentRecord.upl}}
+          div
+            span Record ID:
+            span {{currentRecord.id}}
+          div
+            span Table Name:
+            span Asian Spice House
+          div
+            span Reference ID:
+            span {{currentRecord.id}}
+          div
+            span User ID:
+            span {{currentRecord.user}}
+          div
+            span Uploaded:
+            span {{currentRecord.upl}}
+          div
+            span Record ID:
+            span {{currentRecord.id}}
+          div
+            span Table Name:
+            span Asian Spice House
+          div
+            span Reference ID:
+            span {{currentRecord.id}}
+          div
+            span User ID:
+            span {{currentRecord.user}}
+          div
+            span Uploaded:
+            span {{currentRecord.upl}}
       .button 
-        sui-button(style="background-color:transparent;color:white;box-shadow:none;border:1px solid white;") Edit
+        sui-button(style="background-color:transparent;color:white;box-shadow:none;border:1px solid white;" @click='editMode=!editMode') {{editMode ? 'Save' : 'Edit'}}
+
+  sui-overlay(ref='overlay_msg')
+    div(style="background-color:white;color:black;padding:2em;")
+      p Are you sure?
+      sui-button(@click='overlay_msg.close();forceBlockBackButton = true;') No
+      sui-button(@click='editMode = false') Yes
+
 </template>
 <script setup>
 // setup script is basically what you run in created()
@@ -325,14 +416,44 @@ let tblList = ref(null); // use ref when you want a reactive primitive data
 let searchTarget = ref('table');
 let indexType = ref('text');
 let overlay = ref(null); // use ref when you want to use variable to save template element
+
 let isAdvancedSearch = ref(false);
 let currentRecord = ref(null);
 let currentRecordView = ref('info');
 
-let closeAdvancedSearch = (e) => {
-  isAdvancedSearch.value = false;
-  createTbl();
-};
+let editMode = ref(false);
+let overlay_msg = ref(null);
+let allowReference = ref(false);
+
+watch(editMode, v => {
+  if (v) {
+    window.location.hash = 'edit';
+  }
+  else {
+    // save the data.then(...
+    window.location.replace(window.location.href.split('#')[0]);
+  }
+});
+
+let forceBlockBackButton = true;
+window.addEventListener('hashchange', () => {
+  if (window.location.hash) {
+    return;
+  }
+
+  if (forceBlockBackButton) {
+    // force block routing just once
+    forceBlockBackButton = false;
+    window.location.hash = 'edit';
+    overlay_msg.value.open();
+  }
+  else {
+    // ok bye
+    editMode.value = false;
+    overlay_msg.value.close();
+  }
+}, false);
+
 
 function createTbl() {
   // creates fake tables
@@ -387,7 +508,7 @@ function showRecord(item) {
 }
 
 function generateList(tbl) {
-  
+
   let toRoute = { name: 'recordDisplay' };
   if (recArr[tbl]) {
     // close if it was already open
@@ -642,6 +763,7 @@ sui-nav.headNav {
   border-radius: 8px;
   overflow: hidden;
   border: 1px solid #808080;
+
   .tab {
     padding: 1em 1em 0 0;
     overflow: hidden;
@@ -711,5 +833,14 @@ sui-nav.headNav {
       text-align: center;
     }
   }
+}
+
+#showRef {
+  background-color: rgb(67, 67, 67);
+  border-radius: 8px;
+  // height: 7.5em;
+  // height: 0px;
+  overflow: hidden;
+  transition: height .2s;
 }
 </style>
