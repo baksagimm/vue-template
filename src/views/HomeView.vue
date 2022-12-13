@@ -29,8 +29,8 @@ main
     br
     
     li
-      RouterLink(to="/record-display-mobile") Record Display Mobile#[br]
-      | Design concept of mobile view of record.#[br]
+      RouterLink(to="/record-edit-mobile") Record Edit Mobile#[br]
+      | Design concept of mobile view of record edit.#[br]
       | For accurate styling details, refer raffina's Figma.
       | Reference on how you can handle navigations for canceling changes.
       | Notice sui-nav nests the data tabs.
@@ -56,6 +56,12 @@ main
       | Explains how vue reactive works.#[br]
       | Irons out some good practices.#[br]
 
+    br
+    
+    li
+      RouterLink(to="/form-reset") Form reset issue#[br]
+      | Address why you should not use form reset in SPA.#[br]
+      | Also includes sui-input fixes.#[br]
 </template>
 
 <style lang="less">

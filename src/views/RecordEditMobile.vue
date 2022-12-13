@@ -212,6 +212,7 @@ watch(editMode, v => {
     window.location.replace(window.location.href.split('#')[0]);
   }
 });
+
 let forceBlockBackButton = true;
 window.addEventListener('hashchange', () => {
   if (window.location.hash) {
@@ -233,36 +234,6 @@ window.addEventListener('hashchange', () => {
 
 </script>
 <style lang="less" scoped>
-.selectInput {
-  width: 100%;
-
-  &>* {
-    vertical-align: middle;
-  }
-
-  &>span {
-    box-shadow: 10px 0px 0 -8px rgb(255 255 255 / 25%);
-
-    width: 8em;
-    display: inline-block;
-  }
-
-  &>sui-input {
-    box-shadow: none;
-    background-color: transparent !important;
-  }
-
-  padding: 0 0 0 8px;
-  position: relative;
-  box-shadow: -1px -1px 2px -1px rgb(0 0 0 / 50%),
-  1px 1px 1px rgb(255 255 255 / 33%),
-  inset 0 0 0 1px rgba(0 0 0 / 25%);
-  background-color: rgba(255, 255, 255, 0.08);
-  display: inline-block;
-  border-radius: 4px;
-  box-sizing: border-box;
-}
-
 .shell {
   // this is a whole display
   min-height: 100vh;
@@ -270,12 +241,6 @@ window.addEventListener('hashchange', () => {
   background-color: #656565;
   color: white;
   display: flex;
-
-  // settings for each font sizes
-  h1 {
-    font-weight: 400;
-    font-size: 32px;
-  }
 }
 
 #showRef {

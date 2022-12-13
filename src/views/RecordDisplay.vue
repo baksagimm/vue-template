@@ -26,11 +26,6 @@
           span Logout
 
     .content
-      form
-        sui-input(ref='searchBox' type='search')
-        sui-input(type='submit' value='search')
-        sui-input(type='reset')
-
       // this is the main content box.
       // it has margin auto and max width for comfortable viewing (ref style sect.)
       // do not use flex box as a content parent unless inevitable.

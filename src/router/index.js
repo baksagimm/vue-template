@@ -10,12 +10,12 @@ const router = createRouter({
       component: HomeView
     },
     {
-      path: '/record-display-mobile',
-      name: 'recordDisplayMobile',
+      path: '/record-edit-mobile',
+      name: 'recordEditMobile',
       // route level code-splitting
       // this generates a separate chunk (About.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
-      component: () => import('../views/RecordDisplayMobile.vue')
+      component: () => import('../views/RecordEditMobile.vue')
     },
     {
       path: '/record-display',
@@ -45,6 +45,14 @@ const router = createRouter({
       // this generates a separate chunk (About.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
       component: () => import('../views/ReactiveVue.vue')
+    },
+    {
+      path: '/form-reset',
+      name: 'formReset',
+      // route level code-splitting
+      // this generates a separate chunk (About.[hash].js) for this route
+      // which is lazy-loaded when the route is visited.
+      component: () => import('../views/FormReset.vue')
     }
   ]
 })
