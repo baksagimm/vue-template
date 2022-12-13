@@ -1,13 +1,11 @@
 <template lang="pug">
 .shell
-    h1 skateui has been updated to 0.1.96. import from header.
-    h4 &lt;script type="module" src="https://broadwayinc.dev/jslib/skateui/0.1.96/skateui.esm.js"&gt;&lt;/script&gt;
-    
-    br
-    
+    h1 skateui has been updated to 0.1.97. import from header.
+    h4 &lt;script type="module" src="https://broadwayinc.dev/jslib/skateui/0.1.97/skateui.esm.js"&gt;&lt;/script&gt;
+
     form
         p input_a
-        sui-input(ref='input' name='input_a' :value='value_a' @input='e=>value_a=e.target.value')
+        sui-input#suiInput(ref='input' name='input_a' :value='value_a' @input='e=>value_a=e.target.value' @load='e=>e.target.focus()')
 
         br
 
@@ -81,21 +79,28 @@
 
 </template>
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
+
 let input = ref(null);
 let value_a = ref('Hello A');
 let value_b = ref('Hello B');
 
-let notice = ''
-
 function log() {
     console.log({ value_a: value_a.value, value_b: value_b.value });
 }
-
+onMounted(() => {
+    input.value.addEventListener('load', e => {
+        // here, you can input.value.el.focus().
+        // e.target.focus() will work as well.
+        // You don't even need onMounted if you are uing @load from template.
+        console.log('sui-input has been loaded!');
+    });
+});
 </script>
 <style lang="less" scoped>
 .shell {
     padding: 1em;
+
     pre {
         // font-weight: bold;
         font-size: 18px;
