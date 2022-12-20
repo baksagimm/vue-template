@@ -16,8 +16,8 @@ window.utils = {
     }
 };
 
-// import { defineCustomElements } from 'skateui/loader';
-// defineCustomElements(window);
+import { defineCustomElements } from 'skateui/loader';
+defineCustomElements(window);
 
 const app = createApp(App);
 

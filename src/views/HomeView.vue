@@ -62,6 +62,12 @@ main
       RouterLink(to="/form-reset") Form reset issue#[br]
       | Address why you should not use form reset in SPA.#[br]
       | Also includes sui-input fixes.#[br]
+    
+    br
+    
+    li
+      RouterLink(to="/vue-events") Exploring vue events#[br]
+      | Some insights of @ in vue, which is the event listener#[br]
 </template>
 
 <style lang="less">
