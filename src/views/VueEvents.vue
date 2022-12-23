@@ -15,7 +15,6 @@
 
 <script setup>
 import nest from '../components/nest.vue';
-
 function isCracked(e) {
     console.log({ isCracked: e });
 }
