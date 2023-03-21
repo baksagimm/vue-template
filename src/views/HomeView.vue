@@ -22,6 +22,12 @@ main
   h2 Pages:
   ul
     li
+      RouterLink(to="/premature-refactoring") Premature refactoring#[br]
+      | Bad practice of premature refactoring.#[br]
+
+    br
+    
+    li
       RouterLink(to="/record-display") Record Display#[br]
       | Design concept of record display.#[br]
       | For accurate styling details, refer raffina's Figma

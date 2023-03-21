@@ -20,10 +20,10 @@
         span Raffina
         div
           // sometimes &nbsp; is more easier than styling margins
-          span Dashboard&nbsp;
-          span Documentation&nbsp;
-          span Account Setting&nbsp;
-          span Logout
+          span &nbsp;Dashboard
+          span &nbsp;Documentation
+          span &nbsp;Account Setting
+          span &nbsp;Logout
 
     .content
       // this is the main content box.
