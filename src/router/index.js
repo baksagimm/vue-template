@@ -18,6 +18,16 @@ const router = createRouter({
       component: () => import('../views/premature-refactoring.vue')
     },
     {
+      path: '/wrapping-css-bad',
+      name: 'WrappingCssBad',
+      component: () => import('../views/wrapping-css-bad.vue')
+    },
+    {
+      path: '/wrapping-css-good',
+      name: 'WrappingCssGood',
+      component: () => import('../views/wrapping-css-good.vue')
+    },
+    {
       path: '/record-edit-mobile',
       name: 'recordEditMobile',
       // route level code-splitting

@@ -22,6 +22,17 @@ main
   h2 Pages:
   ul
     li
+      RouterLink(to="/wrapping-css-bad") CSS Bad practice#[br]
+      | Bad practice of CSS.#[br]
+
+    br
+    li
+      RouterLink(to="/wrapping-css-good") CSS Good practice#[br]
+      | Good practice of CSS.#[br]
+
+    br
+    
+    li
       RouterLink(to="/premature-refactoring") Premature refactoring#[br]
       | Bad practice of premature refactoring.#[br]
 
